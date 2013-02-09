@@ -1,0 +1,161 @@
+# CS/EE 120A Midterm Study Guide
+
+## Chapter 1
+
+### What is the difference between an analog and digital signal?
+
+An analog signal's possible values is infinite, whereas a digital signal's
+possible values is finite (ex: typical binary signals are either 1 or 0 at any
+given point in time).
+
+### Convert the following numbers from binary to decimal.
+
+ 1. 100
+ 1. 100101
+ 1. 1111
+
+#### Answers
+
+ 1. `2^2 = 4`
+ 1. `2^0 + 2^2 + 2^5 = 1 + 4 + 32 = 37`
+ 1. `2^4 - 1 = 16 - 1 = 15`
+
+### What are the methods you should know for converting from decimal to binary?
+
+ * Addition Method
+ * Divide-by-2 Method
+
+### Convert 24 into binary using the addition method.
+
+`2^4 = 16 =< 24` **New Sum**: `24 - 16 = 8`  
+`2^3 = 8 =< 8` **New Sum**: `8 - 8 = 0`  
+Remaining digits are 0.  
+Result: **11000**  
+
+### Convert 24 into binary using the divide-by-two method.
+
+`24 / 2 = 12 remainder 0`  
+`12 / 2  = 6 remainder 0`  
+`6 / 2 = 3 remainder 0`  
+`3 / 2 = 1 remainder 1`  
+`1 / 2 = 0 remainder 1`  
+
+**Result:** 00011
+
+Remembering whether you read the result bottom-up or top-down is simple if you
+can remember that your last calculation will always end on a 1 which makes
+sense because if your last calculation had a remainder of 0 it would basically
+be a wasted calculation (since leading 0s don't mean anything). There's another
+method of remembering I mention below if you don't get this one.
+
+### Convert 1001101101101 into hexadecimal.
+
+Arguable the quickest way to do this (certainly the quickest way to do it if
+enough of these types of questions exist) is to quickly create a lookup table.
+
+```
+BIN  HEX DEC
+0000 0   0
+0001 1   1
+0010 2   2
+0011 3   3
+0100 4   4
+0101 5   5
+0110 6   6
+0111 7   7
+1000 8   8
+1001 9   9
+1010 A   10
+1011 B   11
+1100 C   12
+1101 D   13
+1110 E   14
+1111 F   15
+```
+
+Once this is done, you just split the binary number into chunks and use the
+lookup table.
+
+```
+0001 0011 0110 1101
+1    3    6    D
+```
+
+So the answer is `0x136D` (`0x` is a typical way of denoting a hexadecimal
+number).
+
+### Convert DEED into binary.
+
+Using the lookup above, this is tasty cake.
+
+```
+D    E    E    D
+1101 1110 1110 1101
+```
+
+So the answer is `1101111011101101`.
+
+### Convert 128 into a base n number.
+
+To convert numbers from base 10 into a base n system, you want to use the
+divide-by-two, except use divide-by-n.
+
+For example, let's convert 128 into a base 7 system.
+
+```
+129 / 7 = 18 remainder 3 (curious how to calculate this? see below)
+18 / 7 = 2 remainder 4
+2 / 7 = 0 remainder 2
+```
+
+So our result is `243`.
+
+The difficulty with this method is that it's hard to remember what order to
+take the remainders in order to get the result (top-down or bottom-up?). A
+simple way to check for yourself is to try with a 1 higher number (so above,
+try switching out 129 with 130). You will immediately see that the only thing
+to change is the first remainder gets incremented by 1. Now if you took the
+result top-down then that would mean `342` would become `432` and that would be
+ridiculous because the weight of the leftmost number is massive, so it must be
+bottom-up. If you have trouble understanding what I mean, try it out.
+
+You may also be unsure about getting remainders of division without doing the
+division by hand. A fast way to do it is to do the calculation on your
+calculator (so `129 / 7 = 18.42857...`) and then rounding down/flooring the
+result (now we have `18`) and then multiplying the original number by that (so
+`18 * 7 = 126`) and then taking the different from that number and the original
+number (so `129 - 126 = 3`), this is your remainder. This whole process ends up
+being two small calculations on your calculator once you streamline it (because
+the final subtraction can be done in your head quickly). See the Python code
+below for a more precise description of the algorithm.
+
+```python
+from math import floor
+
+numerator = 129
+denominator = 7
+
+result = floor(129 / 7)
+remainder = 129 - result * 7
+```
+
+Try it out yourself.
+
+### Convert 0x4E3 into decimal.
+
+Converting from hexadecimal to decimal is another piece of tasty cake using
+that lookup table we created above. Just take the values of each number
+and multiply it by the weight of the digit.
+
+`4 * 16^2 + 14 * 16^1 + 3 * 16^0 = 1024 + 224 + 3 = 1251`
+
+### What are the pros and cons of using a microprocessor over a custom digital circuit and vice-versa?
+
+Microprocessors are (in relation to custom circuits)...
+
+ * **[Pro]** much cheaper.
+ * **[Pro]** more flexible to change.
+ * **[Pro]** much easier to use, create, and test.
+ * **[Con]** much slower (generally).
+ * **[Con]** more power-hungry.
+ * **[Con]** larger and take up more space.
